@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.Message;
 
 @Configuration
 public class ProductCommandConsumer {
@@ -22,20 +24,22 @@ public class ProductCommandConsumer {
     }
 
     @Bean
-    public Function<Command<ProductDto>, Reply<?>> handlerCommands() {
+    public Function<Message<Command<ProductDto>>, Message<Reply<?>>> handlerCommands() {
 
-        return command -> {
+        return msg -> {
+            Command<ProductDto> command = msg.getPayload();
             String commandType = command.type() == null ? "null" : command.type().toUpperCase();
+            Reply<ProductDto> reply;
             switch (commandType) {
                 case "CREATE" -> {
                     if (command.body() == null) {
                         logger.warn("Received CREATE command with null body");
-                        return new Reply<>("ERROR", "Empty Body",null);
+                        reply = new Reply<>("ERROR", "Empty Body",null);
                     } else {
                         ProductDto productDto = command.body();
                         ProductDto productSave = productService.createProduct(command.body());
                         logger.info("Creating product name={}, price={}", productSave.name(),productSave.price());
-                        return new Reply<>("SUCCESS", "Created Product",productSave);
+                        reply = new Reply<>("SUCCESS", "Created Product",productSave);
                     }
                 }
 //                case "UPDATE" -> {
@@ -64,9 +68,16 @@ public class ProductCommandConsumer {
 //                }
                 default -> {
                     logger.warn("Unknown command type: {}", command.type());
-                    return new Reply<>("ERROR", "Unknown command type",null);
+                    reply = new Reply<>("ERROR", "Unknown command type",null);
                 }
             }
+            String correlationId = msg.getHeaders().get("correlationId").toString();
+            logger.info("CorrelationId={} recibido", correlationId);
+            MessageBuilder<Reply<?>> builderOut = MessageBuilder.withPayload(reply);
+            if (correlationId != null) {
+                builderOut.setHeader("correlationId", correlationId);
+            }
+            return builderOut.build();
         };
     }
 }
