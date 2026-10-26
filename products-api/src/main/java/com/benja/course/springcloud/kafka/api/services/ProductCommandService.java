@@ -19,4 +19,14 @@ public interface ProductCommandService {
      * @return respuesta recibida del servicio que procesa el comando
      */
     Reply<?> sendCreateAndWait(ProductDto dto, Duration timeout);
+
+    /**
+     * Envía un comando para consultar un producto y espera la respuesta hasta
+     * que transcurra el tiempo límite indicado.
+     *
+     * @param id identificador del producto que se desea consultar
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
+    Reply<?> sendReadAndWait(Long id, Duration timeout);
 }
