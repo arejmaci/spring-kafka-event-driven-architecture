@@ -1,7 +1,7 @@
 # RFC-001: Async Request-Reply Pattern over Kafka via Spring Cloud Stream
 
 - **Status**: Standard / Approved
-- **Author**: Technical Architecture Team
+- **Author**: Benjamin Macias
 - **Date**: October 2026
 - **Target Subsystem**: `products-api` & `product-command`
 - **Scope**: Inter-service Communication & Synchronous-to-Asynchronous Bridging
