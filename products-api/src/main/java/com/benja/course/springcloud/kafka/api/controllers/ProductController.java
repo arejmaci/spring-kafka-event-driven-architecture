@@ -1,5 +1,6 @@
 package com.benja.course.springcloud.kafka.api.controllers;
 
+import com.benja.course.springcloud.kafka.api.model.Reply;
 import com.benja.course.springcloud.kafka.api.model.dto.ProductDto;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.benja.course.springcloud.kafka.api.services.ProductCommandService;
 
+import java.time.Duration;
 import java.util.Map;
 
 /**
@@ -29,14 +31,18 @@ public class ProductController {
     }
 
     /**
-     * Recibe los datos de un producto y solicita su creación.
+     * Solicita la creación de un producto y devuelve el resultado recibido
+     * del servicio que procesa el comando.
      *
      * @param productDto datos validados del producto
-     * @return confirmación de que el comando de creación fue enviado
+     * @return respuesta HTTP con el producto creado o el error informado
      */
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto productDto) {
-        productCommandService.sendCreate(productDto);
-        return ResponseEntity.ok().body(Map.of("message", "Product creation command sent successfully"));
+        Reply<?> reply = productCommandService.sendCreateAndWait(productDto, Duration.ofSeconds(5) );
+        if("SUCCESS".equalsIgnoreCase(reply.status())){
+            return ResponseEntity.ok().body(reply.body());
+        }
+        return ResponseEntity.badRequest().body((Map.of("Error", reply.message())));
     }
 }

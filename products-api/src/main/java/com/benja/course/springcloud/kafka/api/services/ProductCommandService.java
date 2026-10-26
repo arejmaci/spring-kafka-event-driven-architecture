@@ -1,16 +1,22 @@
 package com.benja.course.springcloud.kafka.api.services;
 
+import com.benja.course.springcloud.kafka.api.model.Reply;
 import com.benja.course.springcloud.kafka.api.model.dto.ProductDto;
 
+import java.time.Duration;
+
 /**
- * Define las operaciones para enviar comandos relacionados con productos.
+ * Define las operaciones para enviar comandos de productos y obtener sus respuestas.
  */
 public interface ProductCommandService {
 
     /**
-     * Solicita la creación de un producto mediante el envío de un comando.
+     * Envía un comando para crear un producto y espera la respuesta hasta que
+     * transcurra el tiempo límite indicado.
      *
      * @param dto datos del producto que se desea crear
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
      */
-    void sendCreate(ProductDto dto);
+    Reply<?> sendCreateAndWait(ProductDto dto, Duration timeout);
 }
