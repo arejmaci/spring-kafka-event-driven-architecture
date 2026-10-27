@@ -81,6 +81,13 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         return sendAndAwait(command, timeout);
     }
 
+    @Override
+    public Reply<?> sendUpdateAndWait(Long id, ProductDto dto, Duration timeout) {
+        Command<ProductDto> command = new Command<>("UPDATE", id, dto);
+        return sendAndAwait(command, timeout);
+
+    }
+
     /**
      * Publica el comando con un identificador de correlación y espera su respuesta.
      * Registra la solicitud antes de publicarla para no perder una respuesta rápida.

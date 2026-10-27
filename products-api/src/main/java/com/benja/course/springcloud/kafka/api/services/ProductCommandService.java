@@ -38,4 +38,6 @@ public interface ProductCommandService {
      * @return respuesta recibida del servicio que procesa el comando
      */
     Reply<?> sendReadAllAndWait( Duration timeout);
+
+    Reply<?> sendUpdateAndWait(Long id, ProductDto dto, Duration timeout);
 }

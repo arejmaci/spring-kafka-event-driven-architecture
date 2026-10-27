@@ -67,6 +67,11 @@ public class ProductController {
         return getResponseEntity(reply);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<?> update(@Valid @RequestBody ProductDto productDto, @PathVariable Long id) {
+        Reply<?> reply = productCommandService.sendUpdateAndWait(id, productDto, Duration.ofSeconds(5) );
+        return getResponseEntity(reply);
+    }
     /**
      * Convierte la respuesta del servicio en una respuesta HTTP según su estado:
      * devuelve el cuerpo si la operación tuvo éxito o el mensaje de error si falló.
