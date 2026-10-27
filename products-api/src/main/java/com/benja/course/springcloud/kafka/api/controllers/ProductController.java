@@ -37,7 +37,7 @@ public class ProductController {
      * @return respuesta HTTP con el producto creado o el error informado
      */
     @PostMapping
-    public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDto productDto) {
+    public ResponseEntity<?> create(@Valid @RequestBody ProductDto productDto) {
         Reply<?> reply = productCommandService.sendCreateAndWait(productDto, Duration.ofSeconds(5) );
         return getResponseEntity(reply);
     }
@@ -50,8 +50,20 @@ public class ProductController {
      * @return respuesta HTTP con los datos del producto o el error informado
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProduct(@PathVariable Long id) {
+    public ResponseEntity<?> getById(@PathVariable Long id) {
         Reply<?> reply = productCommandService.sendReadAndWait(id, Duration.ofSeconds(5) );
+        return getResponseEntity(reply);
+    }
+
+    /**
+     * Solicita la consulta de todos los productos y espera hasta cinco segundos
+     * por la respuesta del servicio que procesa el comando.
+     *
+     * @return respuesta HTTP con la lista de productos o el error informado
+     */
+    @GetMapping()
+    public ResponseEntity<?> getAll() {
+        Reply<?> reply = productCommandService.sendReadAllAndWait(Duration.ofSeconds(5) );
         return getResponseEntity(reply);
     }
 

@@ -29,4 +29,13 @@ public interface ProductCommandService {
      * @return respuesta recibida del servicio que procesa el comando
      */
     Reply<?> sendReadAndWait(Long id, Duration timeout);
+
+    /**
+     * Envía un comando para consultar todos los productos y espera la respuesta
+     * hasta que transcurra el tiempo límite indicado.
+     *
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
+    Reply<?> sendReadAllAndWait( Duration timeout);
 }

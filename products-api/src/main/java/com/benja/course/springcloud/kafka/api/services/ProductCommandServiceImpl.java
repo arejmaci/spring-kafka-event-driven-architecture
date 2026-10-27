@@ -69,6 +69,19 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     }
 
     /**
+     * Envía a Kafka un comando para consultar todos los productos y espera
+     * la respuesta asociada hasta que se cumpla el tiempo límite.
+     *
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
+    @Override
+    public Reply<?> sendReadAllAndWait(Duration timeout) {
+        Command<ProductDto> command = new Command<>("READ_ALL", null, null);
+        return sendAndAwait(command, timeout);
+    }
+
+    /**
      * Publica el comando con un identificador de correlación y espera su respuesta.
      * Registra la solicitud antes de publicarla para no perder una respuesta rápida.
      *
@@ -98,4 +111,5 @@ public class ProductCommandServiceImpl implements ProductCommandService {
             throw new RuntimeException("Time out esperando la respuesta de product-command desde kafka", e);
         }
     }
+
 }
