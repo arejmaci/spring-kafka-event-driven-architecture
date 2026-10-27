@@ -39,5 +39,24 @@ public interface ProductCommandService {
      */
     Reply<?> sendReadAllAndWait( Duration timeout);
 
+    /**
+     * Envía un comando para actualizar un producto y espera la respuesta
+     * hasta que transcurra el tiempo límite indicado.
+     *
+     * @param id identificador del producto que se desea actualizar
+     * @param dto datos con los valores que se actualizarán
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
     Reply<?> sendUpdateAndWait(Long id, ProductDto dto, Duration timeout);
+
+    /**
+     * Envía un comando para eliminar un producto y espera la respuesta
+     * hasta que transcurra el tiempo límite indicado.
+     *
+     * @param id identificador del producto que se desea eliminar
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
+    Reply<?> sendDeleteAndWait(Long id, Duration timeout);
 }

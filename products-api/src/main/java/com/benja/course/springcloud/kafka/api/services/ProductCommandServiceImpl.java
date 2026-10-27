@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Implementa el envío de comandos de creación y consulta de productos a Kafka,
- * y la espera de sus respuestas.
+ * Implementa el envío de comandos de productos a Kafka y la espera de sus
+ * respuestas.
  */
 @Service
 public class ProductCommandServiceImpl implements ProductCommandService {
@@ -81,12 +81,33 @@ public class ProductCommandServiceImpl implements ProductCommandService {
         return sendAndAwait(command, timeout);
     }
 
+    /**
+     * Envía a Kafka un comando de actualización y espera la respuesta asociada.
+     *
+     * @param id identificador del producto que se desea actualizar
+     * @param dto datos con los valores que se actualizarán
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
     @Override
     public Reply<?> sendUpdateAndWait(Long id, ProductDto dto, Duration timeout) {
         Command<ProductDto> command = new Command<>("UPDATE", id, dto);
         return sendAndAwait(command, timeout);
-
     }
+
+    /**
+     * Envía a Kafka un comando de eliminación y espera la respuesta asociada.
+     *
+     * @param id identificador del producto que se desea eliminar
+     * @param timeout tiempo máximo de espera por la respuesta
+     * @return respuesta recibida del servicio que procesa el comando
+     */
+    @Override
+    public Reply<?> sendDeleteAndWait(Long id, Duration timeout) {
+        Command<ProductDto> command = new Command<>("DELETE", id, null);
+        return sendAndAwait(command, timeout);
+    }
+
 
     /**
      * Publica el comando con un identificador de correlación y espera su respuesta.

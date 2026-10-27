@@ -67,11 +67,33 @@ public class ProductController {
         return getResponseEntity(reply);
     }
 
+    /**
+     * Solicita la actualización de un producto y espera hasta cinco segundos
+     * por la respuesta del servicio que procesa el comando.
+     *
+     * @param productDto datos validados con los valores que se actualizarán
+     * @param id identificador del producto que se desea actualizar
+     * @return respuesta HTTP con el producto actualizado o el error informado
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Valid @RequestBody ProductDto productDto, @PathVariable Long id) {
         Reply<?> reply = productCommandService.sendUpdateAndWait(id, productDto, Duration.ofSeconds(5) );
         return getResponseEntity(reply);
     }
+
+    /**
+     * Solicita la eliminación de un producto y espera hasta cinco segundos
+     * por la respuesta del servicio que procesa el comando.
+     *
+     * @param id identificador del producto que se desea eliminar
+     * @return respuesta HTTP con el resultado de la operación o el error informado
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        Reply<?> reply = productCommandService.sendDeleteAndWait(id, Duration.ofSeconds(5) );
+        return getResponseEntity(reply);
+    }
+
     /**
      * Convierte la respuesta del servicio en una respuesta HTTP según su estado:
      * devuelve el cuerpo si la operación tuvo éxito o el mensaje de error si falló.
