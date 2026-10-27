@@ -36,7 +36,6 @@ public class ProductCommandConsumer {
                         logger.warn("Received CREATE command with null body");
                         reply = new Reply<>("ERROR", "Empty Body",null);
                     } else {
-                        ProductDto productDto = command.body();
                         ProductDto productSave = productService.createProduct(command.body());
                         logger.info("Creating product name={}, price={}", productSave.name(),productSave.price());
                         reply = new Reply<>("SUCCESS", "Created Product",productSave);
@@ -45,6 +44,7 @@ public class ProductCommandConsumer {
                 case "READ" -> {
                     if (command.id() == null) {
                         logger.warn("id is required");
+                        new Reply<>("ERROR", "Id is required.",null);
                     } else {
                         ProductDto productRead = productService.findById(command.id());
                         logger.info("Reading product by ID: {}", command.id());
@@ -55,16 +55,27 @@ public class ProductCommandConsumer {
                 }
                 case "READ_ALL" -> {
                     logger.info("Reading all products");
-
                     reply = new Reply<>("SUCCESS", "Read Product:", productService.findAll());
                 }
-//                case "UPDATE" -> {
-//                    if (command.body() == null) {
-//                        logger.warn("Received UPDATE command with null body");
-//                    } else {
-//                        logger.info("Updating product: {}", command.body());
-//                    }
-//                }
+                case "UPDATE" -> {
+                    if (command.body() == null || command.id() == null) {
+                        logger.warn("Body and Id are required.");
+                        new Reply<>("ERROR", "Id and Body are required.",null);
+                    } else {
+                        logger.info("Updating product: {}", command.body());
+                        ProductDto productRead = productService.findById(command.id());
+                        logger.info("Reading product by ID: {}", command.id());
+                        ProductDto productUpdate = productService.updateProduct(command.body(),command.id());
+                        if (productUpdate != null) {
+                            new Reply<>("SUCCESS", "Update Product:",productRead);
+                            logger.info("Updating product name: {} price: {} ", command.body().name(), command.body().price());
+                        } else {
+                            new Reply<>("ERROR", "There is not product with id = " + command.id() + " to update.",null);
+                            logger.info("There is not product with id: {} ", command.id());
+                        }
+                    }
+                }
+
 //                case "DELETE" -> {
 //                    if (command.body() == null) {
 //                        logger.warn("Received DELETE command with null body");
@@ -77,7 +88,7 @@ public class ProductCommandConsumer {
                     reply = new Reply<>("ERROR", "Unknown command type",null);
                 }
             }
-            String correlationId = msg.getHeaders().get("correlationId").toString();
+            String correlationId = msg.getHeaders().get("correlationId",String.class);
             logger.info("CorrelationId={} recibido", correlationId);
             MessageBuilder<Reply<?>> builderOut = MessageBuilder.withPayload(reply);
             if (correlationId != null) {

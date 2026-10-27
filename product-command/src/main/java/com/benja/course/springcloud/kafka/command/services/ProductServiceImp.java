@@ -39,4 +39,14 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAll().stream().map(Mappers::toDto).toList();
     }
 
+    @Override
+    public ProductDto updateProduct(ProductDto dto, Long id) {
+        Product product = productRepository.findById(id).orElse(null);
+        if(product == null ){
+            return null;
+        }
+        product.setName(dto.name());
+        product.setPrice(dto.price());
+        return Mappers.toDto(productRepository.save(product));
+    }
 }
