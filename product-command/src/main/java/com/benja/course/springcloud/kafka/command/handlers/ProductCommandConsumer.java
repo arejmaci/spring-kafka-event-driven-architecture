@@ -29,7 +29,7 @@ public class ProductCommandConsumer {
         return msg -> {
             Command<ProductDto> command = msg.getPayload();
             String commandType = command.type() == null ? "null" : command.type().toUpperCase();
-            Reply<ProductDto> reply;
+            Reply<?> reply = null;
             switch (commandType) {
                 case "CREATE" -> {
                     if (command.body() == null) {
@@ -41,6 +41,22 @@ public class ProductCommandConsumer {
                         logger.info("Creating product name={}, price={}", productSave.name(),productSave.price());
                         reply = new Reply<>("SUCCESS", "Created Product",productSave);
                     }
+                }
+                case "READ" -> {
+                    if (command.id() == null) {
+                        logger.warn("id is required");
+                    } else {
+                        ProductDto productRead = productService.findById(command.id());
+                        logger.info("Reading product by ID: {}", command.id());
+                        reply = (productRead == null)?
+                                new Reply<>("ERROR", "There is not product with id = " + command.id(),null):
+                                new Reply<>("SUCCESS", "Read Product:",productRead);
+                    }
+                }
+                case "READ_ALL" -> {
+                    logger.info("Reading all products");
+
+                    reply = new Reply<>("SUCCESS", "Read Product:", productService.findAll());
                 }
 //                case "UPDATE" -> {
 //                    if (command.body() == null) {
@@ -54,16 +70,6 @@ public class ProductCommandConsumer {
 //                        logger.warn("Received DELETE command with null body");
 //                    } else {
 //                        logger.info("Deleting product: {}", command.body());
-//                    }
-//                }
-//                case "READ_ALL" -> {
-//                    logger.info("Reading all products");
-//                }
-//                case "READ_BY_ID" -> {
-//                    if (command.body() == null) {
-//                        logger.warn("Received READ_BY_ID command with null body");
-//                    } else {
-//                        logger.info("Reading product by ID: {}", command.body());
 //                    }
 //                }
                 default -> {
