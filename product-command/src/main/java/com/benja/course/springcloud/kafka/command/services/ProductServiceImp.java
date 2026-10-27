@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.benja.course.springcloud.kafka.command.model.mapper.Mappers.toDto;
 
@@ -39,7 +38,9 @@ public class ProductServiceImp implements ProductService {
         return productRepository.findAll().stream().map(Mappers::toDto).toList();
     }
 
+
     @Override
+    @Transactional
     public ProductDto updateProduct(ProductDto dto, Long id) {
         Product product = productRepository.findById(id).orElse(null);
         if(product == null ){
@@ -48,5 +49,19 @@ public class ProductServiceImp implements ProductService {
         product.setName(dto.name());
         product.setPrice(dto.price());
         return Mappers.toDto(productRepository.save(product));
+    }
+
+    @Override
+    @Transactional
+    public Boolean deleteProduct(Long id) {
+        if(id != null){
+            Product product = productRepository.findById(id).orElse(null);
+            if(product != null ) {
+                productRepository.deleteById(id);
+                return true;
+            }
+            return false;
+        }
+      return false;
     }
 }

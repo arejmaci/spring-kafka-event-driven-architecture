@@ -44,7 +44,7 @@ public class ProductCommandConsumer {
                 case "READ" -> {
                     if (command.id() == null) {
                         logger.warn("id is required");
-                        new Reply<>("ERROR", "Id is required.",null);
+                        reply = new Reply<>("ERROR", "Id is required.",null);
                     } else {
                         ProductDto productRead = productService.findById(command.id());
                         logger.info("Reading product by ID: {}", command.id());
@@ -60,29 +60,34 @@ public class ProductCommandConsumer {
                 case "UPDATE" -> {
                     if (command.body() == null || command.id() == null) {
                         logger.warn("Body and Id are required.");
-                        new Reply<>("ERROR", "Id and Body are required.",null);
+                        reply = new Reply<>("ERROR", "Id and Body are required.",null);
                     } else {
                         logger.info("Updating product: {}", command.body());
-                        ProductDto productRead = productService.findById(command.id());
-                        logger.info("Reading product by ID: {}", command.id());
                         ProductDto productUpdate = productService.updateProduct(command.body(),command.id());
                         if (productUpdate != null) {
-                            new Reply<>("SUCCESS", "Update Product:",productRead);
+                            reply = new Reply<>("SUCCESS", "Update Product:",productUpdate);
                             logger.info("Updating product name: {} price: {} ", command.body().name(), command.body().price());
                         } else {
-                            new Reply<>("ERROR", "There is not product with id = " + command.id() + " to update.",null);
+                            reply = new Reply<>("ERROR", "There is not product with id = " + command.id() + " to update.",null);
                             logger.info("There is not product with id: {} ", command.id());
                         }
                     }
                 }
-
-//                case "DELETE" -> {
-//                    if (command.body() == null) {
-//                        logger.warn("Received DELETE command with null body");
-//                    } else {
-//                        logger.info("Deleting product: {}", command.body());
-//                    }
-//                }
+                case "DELETE" -> {
+                    if (command.id() == null) {
+                        logger.warn("Received DELETE command with null id");
+                        reply = new Reply<>("ERROR", "Received DELETE command with null id.",null);
+                    } else {
+                        logger.info("Deleting product: {}", command.id());
+                        Boolean deleted = productService.deleteProduct(command.id());
+                        if  (deleted) {
+                            reply = new Reply<>("SUCCESS", "Deleted Product with id: " + command.id(), null);
+                        } else{
+                            reply = new Reply<>("ERROR", "There is not product with id = " + command.id() + " to delete.",null);
+                            logger.info("There is not product with id: {} ", command.id());
+                        }
+                    }
+                }
                 default -> {
                     logger.warn("Unknown command type: {}", command.type());
                     reply = new Reply<>("ERROR", "Unknown command type",null);
