@@ -2,6 +2,7 @@ package com.benja.course.springcloud.kafka.api.services;
 
 import com.benja.course.springcloud.kafka.api.messaging.ReplyInbox;
 import com.benja.course.springcloud.kafka.api.model.Command;
+import com.benja.course.springcloud.kafka.api.model.CommandType;
 import com.benja.course.springcloud.kafka.api.model.Reply;
 import com.benja.course.springcloud.kafka.api.model.dto.ProductDto;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -51,7 +52,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Reply<?> sendCreateAndWait(ProductDto dto, Duration timeout) {
-        Command<ProductDto> command = new Command<>("CREATE", null, dto);
+        Command<ProductDto> command = new Command<>(CommandType.CREATE, null, dto);
         return sendAndAwait(command, timeout);
     }
 
@@ -64,7 +65,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Reply<?> sendReadAndWait(Long id, Duration timeout) {
-        Command<ProductDto> command = new Command<>("READ", id, null);
+        Command<ProductDto> command = new Command<>(CommandType.READ, id, null);
         return sendAndAwait(command, timeout);
     }
 
@@ -77,7 +78,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Reply<?> sendReadAllAndWait(Duration timeout) {
-        Command<ProductDto> command = new Command<>("READ_ALL", null, null);
+        Command<ProductDto> command = new Command<>(CommandType.READ_ALL, null, null);
         return sendAndAwait(command, timeout);
     }
 
@@ -91,7 +92,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Reply<?> sendUpdateAndWait(Long id, ProductDto dto, Duration timeout) {
-        Command<ProductDto> command = new Command<>("UPDATE", id, dto);
+        Command<ProductDto> command = new Command<>(CommandType.UPDATE, id, dto);
         return sendAndAwait(command, timeout);
     }
 
@@ -104,7 +105,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Override
     public Reply<?> sendDeleteAndWait(Long id, Duration timeout) {
-        Command<ProductDto> command = new Command<>("DELETE", id, null);
+        Command<ProductDto> command = new Command<>(CommandType.DELETE, id, null);
         return sendAndAwait(command, timeout);
     }
 

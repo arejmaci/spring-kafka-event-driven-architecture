@@ -8,5 +8,5 @@ package com.benja.course.springcloud.kafka.api.model;
  * @param id identificador del recurso asociado, si corresponde
  * @param body contenido necesario para ejecutar el comando
  */
-public record Command<T>(String type, Long id, T body) {
+public record Command<T>(CommandType type, Long id, T body) {
 }
