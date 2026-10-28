@@ -1,6 +1,7 @@
 package com.benja.course.springcloud.kafka.command.handlers;
 
 import com.benja.course.springcloud.kafka.command.model.Command;
+import com.benja.course.springcloud.kafka.command.model.CommandType;
 import com.benja.course.springcloud.kafka.command.model.Reply;
 import com.benja.course.springcloud.kafka.command.model.dto.ProductDto;
 import com.benja.course.springcloud.kafka.command.services.ProductService;
@@ -28,10 +29,10 @@ public class ProductCommandConsumer {
 
         return msg -> {
             Command<ProductDto> command = msg.getPayload();
-            String commandType = command.type() == null ? "null" : command.type().toUpperCase();
+            CommandType commandType = command.type();
             Reply<?> reply = null;
             switch (commandType) {
-                case "CREATE" -> {
+                case CommandType.CREATE -> {
                     if (command.body() == null) {
                         logger.warn("Received CREATE command with null body");
                         reply = new Reply<>("ERROR", "Empty Body",null);
@@ -41,7 +42,7 @@ public class ProductCommandConsumer {
                         reply = new Reply<>("SUCCESS", "Created Product",productSave);
                     }
                 }
-                case "READ" -> {
+                case CommandType.READ -> {
                     if (command.id() == null) {
                         logger.warn("id is required");
                         reply = new Reply<>("ERROR", "Id is required.",null);
@@ -53,11 +54,11 @@ public class ProductCommandConsumer {
                                 new Reply<>("SUCCESS", "Read Product:",productRead);
                     }
                 }
-                case "READ_ALL" -> {
+                case CommandType.READ_ALL -> {
                     logger.info("Reading all products");
                     reply = new Reply<>("SUCCESS", "Read Product:", productService.findAll());
                 }
-                case "UPDATE" -> {
+                case CommandType.UPDATE -> {
                     if (command.body() == null || command.id() == null) {
                         logger.warn("Body and Id are required.");
                         reply = new Reply<>("ERROR", "Id and Body are required.",null);
@@ -73,7 +74,7 @@ public class ProductCommandConsumer {
                         }
                     }
                 }
-                case "DELETE" -> {
+                case CommandType.DELETE -> {
                     if (command.id() == null) {
                         logger.warn("Received DELETE command with null id");
                         reply = new Reply<>("ERROR", "Received DELETE command with null id.",null);

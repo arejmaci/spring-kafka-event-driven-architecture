@@ -1,4 +1,4 @@
-package com.benja.course.springcloud.kafka.api.model;
+package com.benja.course.springcloud.kafka.command.model;
 
 public enum CommandType {
     CREATE,
