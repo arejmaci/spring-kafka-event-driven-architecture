@@ -8,5 +8,5 @@ package com.benja.course.springcloud.kafka.api.model;
  * @param message mensaje descriptivo de la respuesta
  * @param body contenido de la respuesta
  */
-public record Reply<T>(String status, String message, T body) {
+public record Reply<T>(ReplyStatus status, String message, T body) {
 }

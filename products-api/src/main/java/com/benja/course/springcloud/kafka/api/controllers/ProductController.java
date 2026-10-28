@@ -102,7 +102,7 @@ public class ProductController {
      * @return respuesta HTTP con estado 200 para éxito o 400 para error
      */
     private static @NonNull ResponseEntity<?> getResponseEntity(Reply<?> reply) {
-        if("SUCCESS".equalsIgnoreCase(reply.status())){
+        if(reply.status().isSuccess()){
             return ResponseEntity.ok().body(reply.body());
         }
         return ResponseEntity.badRequest().body((Map.of("Error", reply.message())));
