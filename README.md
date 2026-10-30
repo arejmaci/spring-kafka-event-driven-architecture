@@ -6,61 +6,61 @@
 [![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-KRaft-black?style=flat-square&logo=apachekafka)](https://kafka.apache.org/)
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
 
-Arquitectura de referencia orientada a eventos (*Event-Driven Architecture*) lista para producción, construida con **Java 21**, **Spring Boot 3.x**, **Spring Cloud Stream** y **Apache Kafka (en modo KRaft)**. Este proyecto demuestra cómo diseñar sistemas distribuidos desacoplados, tolerantes a fallos y de alto rendimiento.
+A production-ready reference architecture for **Event-Driven Architecture (EDA)** built with **Java 21**, **Spring Boot 3.x**, **Spring Cloud Stream**, and **Apache Kafka (KRaft mode)**. This repository showcases how to design decoupled, fault-tolerant, and high-performance distributed microservices.
 
 ---
 
-## 🏗️ Arquitectura y Patrones de Diseño
+## 🏗️ Architecture & Key Concepts
 
-* **Orientación a Eventos (EDA)**: Comunicación asíncrona entre microservicios independientes mediante Apache Kafka como *broker* central de mensajes.
-* **Abstracción con Spring Cloud Stream**: Uso del modelo de programación funcional (`Function`, `Consumer`, `Supplier`) para desacoplar la lógica de negocio de los detalles de infraestructura de mensajería.
-* **Patrón Request-Reply**: Implementación robusta de comunicación síncrona sobre flujos asíncronos utilizando *Correlation IDs* y tópicos de respuesta (documentado en el [RFC-001](./docs/RFC-001-request-reply-pattern.md)).
-* **Apache Kafka en Modo KRaft**: Ejecución sin ZooKeeper para simplificar la topología de despliegue, reducir consumo de recursos y mejorar los tiempos de arranque.
+* **Event-Driven Architecture (EDA)**: Asynchronous communication between decoupled microservices leveraging Apache Kafka as the central event broker.
+* **Spring Cloud Stream Abstraction**: Functional programming model (`Function`, `Consumer`, `Supplier`) to isolate core business logic from underlying messaging infrastructure.
+* **Request-Reply Pattern**: A robust implementation of synchronous messaging over asynchronous event streams using Correlation IDs and dedicated reply topics (documented in [RFC-001](./docs/RFC-001-request-reply-pattern.md)).
+* **Apache Kafka in KRaft Mode**: Operates without ZooKeeper to streamline deployment topology, reduce resource overhead, and speed up container startup times.
 
 ---
 
-## 📂 Estructura del Proyecto
+## 📂 Repository Structure
 
 ```text
 spring-kafka-event-driven-architecture/
-├── docker-compose.yml              # Orquestación local (Kafka KRaft + Kafka UI)
-├── docs/                           # Especificaciones técnicas y RFCs
+├── docker-compose.yml              # Local infrastructure orchestration (Kafka KRaft + Kafka UI)
+├── docs/                           # Technical specifications and RFCs
 │   └── RFC-001-request-reply-pattern.md
-├── services/                       # Módulos de microservicios
-│   ├── producer-service/           # Productor de eventos y origen de peticiones
-│   └── consumer-service/           # Procesador de eventos y manejador de dominio
-└── pom.xml                         # Configuración raíz multi-módulo Maven
+├── services/                       # Microservice modules
+│   ├── producer-service/           # Event producer and request initiator
+│   └── consumer-service/           # Event processor and domain logic handler
+└── pom.xml                         # Root Maven multi-module POM
 ```
 
 ---
 
-## 🚀 Guía de Inicio Rápido
+## 🚀 Getting Started
 
-### Prerrequisitos
+### Prerequisites
 * **Java 21 (JDK 21)**
 * **Maven 3.9+**
 * **Docker & Docker Compose**
 
-### 1. Clonar el Repositorio
+### 1. Clone the Repository
 ```bash
 git clone https://github.com/arejmaci/spring-kafka-event-driven-architecture.git
 cd spring-kafka-event-driven-architecture
 ```
 
-### 2. Levantar la Infraestructura (Kafka & Kafka UI)
-Inicia el clúster de Kafka en modo KRaft y la interfaz gráfica para monitoreo:
+### 2. Start Infrastructure (Kafka KRaft & Kafka UI)
+Spin up the Kafka broker in KRaft mode alongside the web UI:
 ```bash
 docker compose up -d
 ```
-> 📊 **Kafka UI** estará disponible en [http://localhost:8080](http://localhost:8080) para inspeccionar tópicos, particiones y mensajes en tiempo real.
+> 📊 **Kafka UI** will be available at [http://localhost:8080](http://localhost:8080) for real-time inspection of topics, partitions, and consumer groups.
 
-### 3. Compilar y Ejecutar los Servicios
-Compila todo el proyecto multi-módulo:
+### 3. Build & Run the Microservices
+Build the entire multi-module project:
 ```bash
 mvn clean install
 ```
 
-Ejecuta los microservicios de forma independiente:
+Run the microservices independently:
 * **Producer Service**:
   ```bash
   cd services/producer-service
@@ -74,18 +74,18 @@ Ejecuta los microservicios de forma independiente:
 
 ---
 
-## 📄 Documentación Técnica
+## 📄 Technical Documentation
 
-* **[RFC-001: Request-Reply Pattern Implementation](./docs/RFC-001-request-reply-pattern.md)**: Especificación detallada y diagramas de secuencia sobre la implementación del patrón de solicitud-respuesta utilizando Spring Cloud Stream y Kafka.
-
----
-
-## 🤝 Contribuciones
-
-¡Las contribuciones, issues y sugerencias son siempre bienvenidas! Siente la libertad de abrir un *pull request* o reportar cualquier mejora.
+* **[RFC-001: Request-Reply Pattern Implementation](./docs/RFC-001-request-reply-pattern.md)**: Detailed specification and sequence diagrams covering the request-reply pattern implementation using Spring Cloud Stream and Kafka.
 
 ---
 
-## 📝 Licencia
+## 🤝 Contributing
 
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
+Contributions, issues, and feature requests are welcome! Feel free to open a pull request or report an issue.
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
