@@ -39,7 +39,7 @@ spring-kafka-event-driven-architecture/
 ### Prerequisites
 * **Java 21 (JDK 21)**
 * **Maven 3.9+**
-* **Docker & Docker Compose**
+* **Docker**
 
 ### 1. Clone the Repository
 ```bash
