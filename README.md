@@ -47,12 +47,12 @@ graph TD
 
 ```text
 spring-kafka-event-driven-architecture/
-├── docs/                           # Technical specifications and RFCs
+├── docs/                    # Technical specifications and RFCs
 │   └── RFC-001-request-reply-pattern.md
-├── services/                       # Microservice modules
-│   ├── producer-service/           # Event producer and request initiator (products-api)
-│   └── consumer-service/           # Event processor and domain logic handler (product-command)
-└── pom.xml                         # Root Maven multi-module POM
+├── products-api/            # REST entry point; sends commands and initiates request-reply
+├── product-command/         # Command service; processes commands and publishes events
+├── LICENSE
+└── README.md
 ```
 
 ---
