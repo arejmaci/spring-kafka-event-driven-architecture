@@ -5,7 +5,7 @@
 [![Spring Cloud Stream](https://img.shields.io/badge/Spring%20Cloud%20Stream-Binder-blue?style=flat-square&logo=spring)](https://spring.io/projects/spring-cloud-stream)
 [![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-KRaft-black?style=flat-square&logo=apachekafka)](https://kafka.apache.org/)
 
-A production-ready reference architecture demonstrating the design and implementation of event-driven distributed microservices using modern **Java 21**, **Spring Boot 3.x**, **Spring Cloud Stream**, and **Apache Kafka in KRaft mode**.
+A reference architecture demonstrating the design and implementation of event-driven distributed microservices using modern **Java 21**, **Spring Boot 3.x**, **Spring Cloud Stream**, and **Apache Kafka in KRaft mode**.
 
 ---
 
