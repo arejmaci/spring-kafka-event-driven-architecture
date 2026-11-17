@@ -116,9 +116,23 @@ docker run -d `
 
 ### 3. Build & Run the Microservices
 
-Build the entire multi-module project:
-```bash
-mvn clean install
+Each service is an independent Maven project. Start them in separate terminals:
+
+- **products-api**:
+
+  ```
+  cd products-api
+  mvn clean install
+  mvn spring-boot:run
+  ```
+
+- **product-command**:
+
+  ```
+  cd product-command
+  mvn clean install
+  mvn spring-boot:run
+  ```
 ```
 
 Run the microservices independently:
